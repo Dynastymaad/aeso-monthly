@@ -141,21 +141,8 @@ def read_contracts(df, asof, n=3, rng=None):
             sp = dec['seasonal'].get(m.month); r['seasonal_prem'] = sp['prem'] if sp else None; r['seasonal_n'] = sp['n'] if sp else 0
             r['settle_pct_hist'] = float((tr.px <= r['settle_flat']).mean())
             r['lead'] = int((m - asof).days)
-            # --- the gap against what is usual at this lead. Fair sits under the market as a rule: the curve
-            # carries a premium over what settles (prem_vs_real by lead bucket). Only the part of the gap that
-            # exceeds that premium is a view; the rest is the market being the market.
-            typ = None
-            for rrow in dec['rows']:
-                if rrow['lo'] < max(r['lead'], 1) <= rrow['hi'] and rrow.get('prem_vs_real') is not None: typ = rrow['prem_vs_real']
-            r['prem_typ'] = typ
-            r['edge_vs_typ'] = (r['edge'] + typ) if typ is not None else None
             life = pwr[(pwr.m == m) & (pwr.ed <= asof)].flat
             r['settle_hi'] = float(life.max()) if len(life) else None; r['settle_lo'] = float(life.min()) if len(life) else None
-        # --- cushion against the same calendar month's normal (settled history, not the trailing year alone)
-        hist_m = settled[(settled.index.month == m.month) & settled.cush.notna()]
-        r['cush_norm'] = float(hist_m.cush.mean()) if len(hist_m) >= 20 else None
-        r['cush_norm_n'] = int(hist_m.index.year.nunique()) if len(hist_m) else 0
-        r['cush_vs_norm'] = (r['cush_mean'] - r['cush_norm']) if (r.get('cush_mean') is not None and r['cush_norm'] is not None) else None
         out.append(r)
     out_dec = dec
     return out, cv, ol, tr, out_dec

@@ -1,0 +1,20 @@
+Daily:
+cd "$env:USERPROFILE\Documents\aeso-monthly"
+.\Refresh.ps1
+
+
+
+Monthly:
+cd "$env:USERPROFILE\Documents\aeso-monthly"
+.\Monthly.ps1
+
+
+
+Git:
+git add -A
+git commit -m "refresh 2026-09-30 08:12"
+git push
+
+
+
+

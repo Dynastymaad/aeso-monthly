@@ -100,12 +100,6 @@ def contract_card(c):
         rows.append(('Fair if AECO were $1 / $2 / $4 / $6 / $10', '<span class="num">' + ' / '.join(f(v, 0, '$') for v in c['fair_at_gas'].values()) + '</span>'))
         if c.get('fair_hr') and c.get('settle_hr'):
             rows.append(('Implied heat rate, fair · market (GJ/MWh)', f'<span class="num">{f(c["fair_hr"], 1)} · {f(c["settle_hr"], 1)}</span>'))
-    if c.get('cush_vs_norm') is not None:
-        cv_ = c['cush_vs_norm']
-        rows.append(('Cushion vs normal for this calendar month', f'<b class="num" style="color:var(--{"red" if cv_ < -200 else "green" if cv_ > 200 else "amber"})">{f(cv_, 0, "", " MW")}</b> <span class="src">normal {f(c["cush_norm"], 0)} MW over {c["cush_norm_n"]} yr — tighter than usual is the only thing the outlook can say that the curve does not already carry</span>'))
-    if c.get('edge_vs_typ') is not None:
-        ev_ = c['edge_vs_typ']
-        rows.append(('Fair − market, beyond the usual premium at this lead', f'<b class="num" style="color:var(--{"green" if ev_ > 2 else "red" if ev_ < -2 else "amber"})">{f(ev_, 2, "$", "")}</b> <span class="src">the market normally settles {f(c["prem_typ"], 2, "$")} over the realised month from here; only the gap past that is a view</span>'))
     rows += [('Expected cushion (P10–P90 of monthly mean)', f'<span class="num">{f(c["cush_mean"], 0)} MW ({f(c["cush_p10"], 0)}–{f(c["cush_p90"], 0)})</span>' if c['cush_mean'] is not None else '–'),
              ('AECO used', f'<span class="num">{f(c["gas_fwd"], 2, "$")}/GJ</span> <span class="src">{c["gas_src"]}</span>')]
     body = ''.join(f'<div class="row"><span>{k}</span><span>{v}</span></div>' for k, v in rows)
