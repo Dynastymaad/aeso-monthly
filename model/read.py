@@ -147,6 +147,8 @@ def read_contracts(df, asof, n=3, rng=None):
             typ = None
             for rrow in dec['rows']:
                 if rrow['lo'] < max(r['lead'], 1) <= rrow['hi'] and rrow.get('prem_vs_real') is not None: typ = rrow['prem_vs_real']
+            # a month already in progress has only its unsettled days left to give back
+            if typ is not None: typ = typ * (nf / ntot)
             r['prem_typ'] = typ
             r['edge_vs_typ'] = (r['edge'] + typ) if typ is not None else None
             life = pwr[(pwr.m == m) & (pwr.ed <= asof)].flat
