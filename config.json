@@ -1,0 +1,9 @@
+{
+  "_comment": "Where the two sibling projects live. null = the folder next door (Documents\\aeso-cushion model, Documents\\aeso-outage-adder).",
+  "cushion_repo": null,
+  "adder_dir": null,
+  "contracts_ahead": 3,
+  "history_days": 365,
+  "spread": 5.0,
+  "_spread": "assumed bid/ask width of the monthly flat, $/MWh; half of it is charged when a call is made"
+}

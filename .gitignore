@@ -1,0 +1,8 @@
+cache/
+db.json
+aeso_key.txt
+__pycache__/
+*.pyc
+data/
+research/daily*.csv
+config.local.json
